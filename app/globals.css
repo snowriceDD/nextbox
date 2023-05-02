@@ -1,0 +1,22 @@
+html {
+  background-color: rgb(109, 109, 109);
+}
+
+.food {
+  margin: 20px auto;
+  width: 200px;
+  background: white;
+  color: black;
+  padding: 20px;
+  border-radius: 5px;
+} 
+
+.navbar {
+  background-color: white;
+  padding : 20px;
+}
+
+.navbar a {
+  margin-right: 10px;
+  text-decoration: none;
+}
