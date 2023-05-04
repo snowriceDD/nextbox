@@ -14,6 +14,8 @@ export default function Cart() {
         <Banner name = {'현대'} />
         <Banner name = {'롯데'} />
         <Banner name = {'하나'} />
+        <Button color = {'red'} />
+        <Button color = {'blue'} />
       </div>
     )
   } 
@@ -31,4 +33,8 @@ export default function Cart() {
           <p>1개</p>
         </div>
     );
+  }
+  
+  const Button = (props) => {
+    return (<button style={{background: `${props.color}`, width: 100, height: 30}}>버튼</button>)
   }
