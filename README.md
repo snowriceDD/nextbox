@@ -344,4 +344,75 @@ mongodb → Database → browse collection →
 
 ⇒ next.js를 사용하는 의미가 없어짐.(페이지 로드가 CSR처럼)
 
+---
 
+**상세페이지**
+
+1. 글 클릭 ⇒ 상세페이지 이동
+2. 클릭될 글의 objectId를 상태관리 ⇒ 상세페이지에서 해당 objectId를 사용하도록
+3. 상세페이지 (DB로 부터 html 렌더링)
+4. 
+
+## Router
+
+---
+
+### server component
+
+중첩 라우트 디테일 페이지 ⇒ **dynamic route**
+
+⇒ 디렉토리 명을 **[디렉토리]** 형식으로
+
+⇒ url의 이 부분에 입력된 값이 parmas로 발생
+
+*ex) /detail/[id] ⇒ /detail/123456789*
+
+*component* - **Link**
+
+```jsx
+<Link href = {'/'}></Link>
+```
+
+이 컴포넌트는 *prefetch기능을 제공하는 <a>의 HTML 요소.*
+
+클라이언트 사이드에서의 경로를 탐색해줌.
+
+Link 컴포넌트는 아래와 같은 속성을 지님(대표적인 3가지만)
+
+- **href** : 탐색할 경로 또는 url를 입력하는 곳
+- **replace :** *(default: false)* ****true인 경우 `Link`는 브라우저의 히스토리 스택에 새 URL을 추가하는 대신 현재 히스토리 상태를 대체
+- **prefetch :** *(default: true)* 백그라운드에서 페이지(href로 표시됨)를 미리 가져 옴. 이는 클라이언트 측 탐색의 성능을 개선하는 데 유용
+
+[Routing: Dynamic Routes](https://nextjs.org/docs/pages/building-your-application/routing/dynamic-routes)
+
+[Components: <Link>](https://nextjs.org/docs/pages/api-reference/components/link)
+
+---
+
+### client component
+
+*function*- **useRouter()**
+
+*상호작용에서 사용*
+
+```jsx
+'use client'
+import { useRouter } from ...;
+
+function DetailRoute() {
+	let router = useRouter();
+
+	return (
+		<button onClick={()=>{ router.push('/') }>button</button> //(.../) 으로 이동
+		<button onClick={()=>{ router.back() }>button</button> //뒤로가기(아마 history)
+		<button onClick={()=>{ router.forward() }>button</button> //앞으로 가기
+		<button onClick={()=>{ router.refresh() }>button</button> //바뀐 부분만 새로고침
+		<button onClick={()=>{ router.prefetch('/') }>button</button>
+			//해당 path의 내용을 미리 로드 => 사용자 경험에서 유리
+	)
+}
+```
+
+[Functions: useRouter](https://nextjs.org/docs/pages/api-reference/functions/use-router)
+    
+--- 
