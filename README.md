@@ -222,3 +222,126 @@ ex) navbar, ads 등
     - lazy loading, 사이즈 최적화, layout shift 방지하는 기능을 가짐
     - import 문으로 image 파일도 가져와줘야 함.
     - 데이터에 따라 변칙적으로 바뀌어야 할 이미지에 대해서는 조금 고민을..
+
+---
+
+## Component 화
+
+1. 함수 만들기(camel case)
+2. 리액트 문법대로 리턴문에 원하는 UI 작성
+3. <Component />
+
+모든 요소를 컴포넌트화 할 필요까진 없다.
+
+### Next Components
+
+1. server component : html 상에 JS 기능을 넣을 수 없음
+    1. default 
+    2. 로드가 빠름
+    3. SEO 이점
+2. client component : React hook, html - JS 기능을 넣을 수 있음
+    1. ‘use client’를 써야.
+    2. 로딩 속도가 느림
+    3. hydration을 걸침
+
+**목적**
+
+1. 제품 별로 +, - 수량을 변경할 수 있는 기능을 구현하고자 함.
+2. 제품 별로 상태 값이 분리되어 변경되어야 함.
+
+**발생한 문제**
+
+1. map으로 생성된 다른 개체의 상태 값도 같이 변경됨.
+
+**해결 방법**
+
+1. onClick 함수 사용을 위해 ‘use client’ 선언
+2. onClick 함수 내, `스프레드 연산자`를 사용하여 상태 값을 복사
+3. 복사된 상태값의 특정 인덱스에 연산 처리
+4. 복사된 상태값과 진짜 상태값을 비교하여 업데이트 실행
+
+```
+let [num, setNum] = useState([0, 0, 0]);
+
+return (<>
+{product.map((e, i)=> {
+          return (<div className="food" key={i}>
+            <img src={`/food${i}.png`} alt={`food${i} 식품 이미지`}/>
+            <h4>{e[0]} ${e[1]}</h4>
+
+            **<button onClick={() => {
+              let cloneNum = [...num] //배열 복사용 spread oprt
+              cloneNum[i]-=1; //배열의 특정 인덱스 값에 연산처리
+              setNum(cloneNum) //재렌더링을 위한 비교실행
+            }}> - </button>
+
+            <span> {num[i]} </span>
+
+            <button onClick={() => {
+              let cloneNum = [...num]
+              cloneNum[i]+=1;
+              setNum(cloneNum)
+            }}> + </button>**
+
+          </div>)
+</>);
+```
+
+---
+### Next.js with Database
+
+**DB 종류**
+
+- 관계형 데이터베이스
+    - 데이터를 엑셀처럼 표에 저장
+    - SQL 언어를 사용하여 데이터 입출력을 관리
+    - 스키마 정의 필요
+    - 데이터 중복 저장을 피하기 위한 정규화 필요
+- 비관계형 데이터베이스
+    - 비교적 자유로운 형식으로 저장
+    - SQL, 스키마 정의, 정규화가 필수되지 않음
+    - 분산처리에 용이
+
+**MongoDB 데이터 저장 방식**
+
+*(여담인데, 전에 면접에서 질문이 나왔었다)*
+
+collection을 개설하고, 그 안에 document를 만들어 데이터를 기록하는 방식으로 데이터를 저장
+
+```json
+{ dataName1 : value1, dataName2 : value2, ... }
+```
+
+document에 데이터를 기록할 때는 JS의 object 자료형과 같은 방식으로 저장
+
+**예시**
+
+- **게시판**
+    - 게시판글 collection
+        - document(글 제목, 글쓴이, 글 내용 등)
+        - document(글 제목, 글쓴이, 글 내용 등)
+        - document(글 제목, 글쓴이, 글 내용 등)
+
+mongodb → Database → browse collection → 
+
+**await**
+
+- js에서 처리가 늦게되는 코드에 대해 기다려주기 위해, 제껴두고 다음 줄을 실행시키는 코드
+- promise를 리턴하는 코드에만 가능
+
+**next의 server component와 client component 구분?**
+
+1. server component에는 상호작용성이 없음(hook, browser API 등)
+2. server component에는 상태관리나 생애주기를 필요로 하지 않음
+3. next의 기본값은 server component, ‘use client’를 명시해주면 client component
+4. 터미널 창에 로그(server), 브라우저 콘솔 탭(client)
+
+**next가 기본적으로 SSR 셋팅**
+
+⇒ server to client의 Javascript 양을 줄여 초기 페이지 로드를 빠르게 하기 위해.
+
+**최상위 page component(page.js)를 ‘use client’ 해버리면?**
+
+⇒ next.js를 사용하는 의미가 없어짐.(페이지 로드가 CSR처럼)
+
+
